@@ -2,6 +2,7 @@ import express from "express"
 import router from "./routers/index.js"
 import cors from "cors";
 import errorHandler from './middlewares/errorHandler.js';
+import requestLogger from "./middlewares/requestLogger.js";
 
 const app = express()
 app.use(cors());
@@ -25,6 +26,7 @@ app.use(function (req, res, next) {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 
+app.use(requestLogger);
 app.use(errorHandler);
 
 app.use(router);
