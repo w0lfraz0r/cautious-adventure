@@ -1,7 +1,7 @@
 import express from "express"
-import userRouter from "./routers/userRouter"
+import router from "./routers/index.js"
 import cors from "cors";
-import { errorHandler } from './middlewares/errorHandler';
+// import { errorHandler } from './middlewares/errorHandler';
 
 const app = express()
 app.use(cors());
@@ -25,14 +25,8 @@ app.use(function (req, res, next) {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json())
 
-app.use(errorHandler);
+// app.use(errorHandler);
 
-app.use("/", (req, res) => {
-    res.json({
-        message: "Hello World"
-    });
-});
-
-app.use("/users", userRouter);
+app.use(router);
 
 export default app
