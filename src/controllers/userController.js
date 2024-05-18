@@ -1,6 +1,4 @@
-import ForbiddenError from "../errors/forbiddenError.js";
 import userService from "../services/userService.js";
-
 
 const userController = {};
 
@@ -9,8 +7,9 @@ userController.getUsers = async () => {
     return users;
 };
 
-userController.getUserById = () => {
-    throw new ForbiddenError('Hi Iam ForbiddenError error');
+userController.getUserById = async (userId) => {
+    const user = await userService.getUserById(userId);
+    return user;
 };
 
 userController.addUser = () => {

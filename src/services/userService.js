@@ -1,4 +1,4 @@
-import ForbiddenError from "../errors/forbiddenError.js";
+import ResourceNotFoundError from "../errors/resourceNotFoundError.js";
 import UserRepository from "../repositories/userRepository.js";
 
 
@@ -9,8 +9,13 @@ userService.getUsers = async () => {
     return userData;
 };
 
-userService.getUserById = () => {
-    throw new ForbiddenError('Hi Iam ForbiddenError error');
+userService.getUserById = async (userId) => {
+    const userData = await UserRepository.findById(userId);
+    if (!userData) {
+        throw new ResourceNotFoundError(`User with id ${userId} not found`);
+    } else {
+        return userData;;
+    }
 };
 
 userService.addUser = () => {
