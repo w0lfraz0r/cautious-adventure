@@ -1,5 +1,6 @@
 import express from "express";
 import userController from "../controllers/userController.js";
+import { wrapAsyncRouter } from "../middlewares/asyncHandler.js";
 
 const userRouter = express.Router()
 
@@ -23,5 +24,7 @@ userRouter.put("/:id", (req, res) => {
 userRouter.delete("/:id", (req, res) => {
     return res.send(userController.markInactive());
 });
+
+wrapAsyncRouter(userRouter);
 
 export default userRouter;
