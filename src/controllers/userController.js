@@ -1,17 +1,12 @@
 import ForbiddenError from "../errors/forbiddenError.js";
+import userService from "../services/userService.js";
 
 
 const userController = {};
 
-const userData = [
-    { id:1, name: `Jhon`, email: 'sadc@gmil.com'},
-    { id:2, name: `Sarah`, email: 'ssdfe@gmil.com'},
-];
-
-userController.getUsers = () => {
-    return userData;
-    // throw new Error('Not implemented');
-
+userController.getUsers = async () => {
+    const users = await userService.getUsers();
+    return users;
 };
 
 userController.getUserById = () => {

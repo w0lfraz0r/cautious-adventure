@@ -1,17 +1,12 @@
 import ForbiddenError from "../errors/forbiddenError.js";
+import UserRepository from "../repositories/userRepository.js";
 
 
 const userService = {};
 
-const userData = [
-    { id:1, name: `Jhon`, email: 'sadc@gmil.com'},
-    { id:2, name: `Sarah`, email: 'ssdfe@gmil.com'},
-];
-
-userService.getUsers = () => {
+userService.getUsers = async () => {
+    const userData = await UserRepository.findAll();
     return userData;
-    // throw new Error('Not implemented');
-
 };
 
 userService.getUserById = () => {

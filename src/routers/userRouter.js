@@ -3,9 +3,9 @@ import userController from "../controllers/userController.js";
 
 const userRouter = express.Router()
 
-userRouter.get("/", (req, res) => {
-    console.log("userRouter");
-    return res.send(userController.getUsers());
+userRouter.get("/", async (req, res) => {
+    const user = await userController.getUsers();
+    return res.send(user);
 });
 
 userRouter.get("/:id", (req, res) => {
