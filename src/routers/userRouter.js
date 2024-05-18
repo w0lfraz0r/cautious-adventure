@@ -1,27 +1,27 @@
 import express from "express";
-import userService from "../services/userService.js";
+import userController from "../controllers/userController.js";
 
 const userRouter = express.Router()
 
 userRouter.get("/", (req, res) => {
     console.log("userRouter");
-    return res.send(userService.getUsers());
+    return res.send(userController.getUsers());
 });
 
 userRouter.get("/:id", (req, res) => {
-    return res.send(userService.getUserById());
+    return res.send(userController.getUserById());
 });
 
 userRouter.post("/", (req, res) => {
-    return res.send(userService.addUser());
+    return res.send(userController.addUser());
 });
 
 userRouter.put("/:id", (req, res) => {
-    return res.send(userService.updateUser());
+    return res.send(userController.updateUser());
 });
 
 userRouter.delete("/:id", (req, res) => {
-    return res.send(userService.markInactive());
+    return res.send(userController.markInactive());
 });
 
 export default userRouter;

@@ -3,6 +3,9 @@ import router from "./routers/index.js"
 import cors from "cors";
 import errorHandler from './middlewares/errorHandler.js';
 import requestLogger from "./middlewares/requestLogger.js";
+import connectDB from "./db/connectDB.js";
+
+await connectDB();
 
 const app = express()
 app.use(cors());
