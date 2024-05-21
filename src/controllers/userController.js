@@ -2,8 +2,8 @@ import userService from "../services/userService.js";
 
 const userController = {};
 
-userController.getUsers = async () => {
-    const users = await userService.getUsers();
+userController.getUsers = async (auth) => {
+    const users = await userService.getUsers(auth);
     return users;
 };
 

@@ -16,7 +16,7 @@ const verifyAccessToken = (req, res, next) => {
             throw new UnauthorizedError('Invalid or expired token');
         }
 
-        req.userId = decoded.userId;
+        req.auth = { userId: decoded.userId };
         next();
     });
 };

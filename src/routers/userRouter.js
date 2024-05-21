@@ -6,7 +6,7 @@ import validateObjectId from "../middlewares/validateObjectId.js";
 const userRouter = express.Router()
 
 userRouter.get("/", async (req, res) => {
-    const users = await userController.getUsers();
+    const users = await userController.getUsers(req.auth);
     return res.send(users);
 });
 

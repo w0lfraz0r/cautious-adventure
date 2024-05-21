@@ -5,8 +5,10 @@ import passwordHashing from "../utills/passwordHashing.js";
 
 const userService = {};
 
-userService.getUsers = async () => {
-    const userData = await UserRepository.findAll();
+userService.getUsers = async (auth) => {
+    const { isAdmin } = await UserRepository.findByIdWithAttributes(auth.userId, { isAdmin: 1 });
+    const query = isAdmin ? {} : { isPublic: true };
+    const userData = await UserRepository.findAll(query);
     return userData;
 };
 
