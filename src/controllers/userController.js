@@ -12,9 +12,9 @@ userController.getUserById = async (userId) => {
     return user;
 };
 
-userController.addUser = () => {
-    throw new Error('Not implemented');
-
+userController.registerUser = async (userObj) => {
+    const newUser = await userService.registerUser(userObj);
+    return newUser;
 };
 
 userController.updateUser = () => {

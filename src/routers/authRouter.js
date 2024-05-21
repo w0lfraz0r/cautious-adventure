@@ -7,6 +7,7 @@ import jwt from "../utills/jwt.js";
 import ValidationError from "../errors/validationError.js";
 import UnauthorizedError from "../errors/unauthorizedError.js";
 import ForbiddenError from "../errors/forbiddenError.js";
+import userController from "../controllers/userController.js";
 
 const authRouter = express.Router();
 
@@ -19,6 +20,32 @@ const loginSchema = Joi.object({
     password: Joi.string().required(),
 });
 
+const registerUserSchema = Joi.object({
+    username: Joi.string()
+        .trim()
+        .required()
+        .min(3)
+        .max(30)
+        .alphanum(),
+    email: Joi.string()
+        .trim()
+        .required()
+        .email({ minDomainSegments: 2 }),
+    password: Joi.string()
+        .trim()
+        .required()
+        .min(6)
+        .max(255),
+    profile: Joi.object({
+        photo: Joi.string().optional().allow(""),
+        name: Joi.string().optional().allow(""),
+        bio: Joi.string().optional().allow(""),
+        phone: Joi.string().optional().allow(""),
+    }),
+    isAdmin: Joi.boolean().optional(),
+    isPublic: Joi.boolean().optional(),
+});
+
 
 authRouter.post("/login", async (req, res) => {
     const { error } = loginSchema.validate(req.body);
@@ -27,7 +54,6 @@ authRouter.post("/login", async (req, res) => {
     }
     const { email, username, password } = req.body;
     const user = await userRepository.findByEmailOrUsername(email, username);
-    console.log('user',user);
 
     if (!user) {
         throw new UnauthorizedError('Invalid credentials');
@@ -41,12 +67,17 @@ authRouter.post("/login", async (req, res) => {
 
     const accessToken = jwt.generateAccessToken(user._id);
 
-    res.json({ accessToken });
+    return res.send({ user: { _id: user._id, email: user.email, username: user.username }, accessToken });
 });
 
 authRouter.post("/register", async (req, res) => {
-    throw new Error("Not implemented");
-    return res.send(userController.addUser());
+    const { error, value } = registerUserSchema.validate(req.body);
+    if (error) {
+        throw new ValidationError(error.details.map(detail => detail.message).join(", "));
+    }
+    const newUser = await userController.registerUser(value);
+    const accessToken = jwt.generateAccessToken(newUser._id);
+    return res.send({ user: { _id: newUser._id, email: newUser.email, username: newUser.username }, accessToken });
 });
 
 wrapAsyncRouter(authRouter);
