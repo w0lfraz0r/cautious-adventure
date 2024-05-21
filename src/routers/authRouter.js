@@ -8,6 +8,8 @@ import ValidationError from "../errors/validationError.js";
 import UnauthorizedError from "../errors/unauthorizedError.js";
 import ForbiddenError from "../errors/forbiddenError.js";
 import userController from "../controllers/userController.js";
+import ResourceNotFoundError from "../errors/resourceNotFoundError.js";
+import maskemail from "maskemail";
 
 const authRouter = express.Router();
 
@@ -15,9 +17,17 @@ const loginSchema = Joi.object({
     email: Joi.string().email().optional(),
     username: Joi.string().required().when('email', {
         is: Joi.not().empty(),
-        then: Joi.forbidden(), // Username cannot be provided if email is present
+        then: Joi.forbidden(),
     }),
     password: Joi.string().required(),
+});
+
+const resetPasswordSchema = Joi.object({
+    email: Joi.string().email().optional(),
+    username: Joi.string().required().when('email', {
+        is: Joi.not().empty(),
+        then: Joi.forbidden(),
+    }),
 });
 
 const registerUserSchema = Joi.object({
@@ -80,6 +90,17 @@ authRouter.post("/register", async (req, res) => {
     return res.send({ user: { _id: newUser._id, email: newUser.email, username: newUser.username }, accessToken });
 });
 
+authRouter.post("/reset-password", async (req, res) => {
+    const { error, value } = resetPasswordSchema.validate(req.body);
+    const { email, username } = req.body;
+    const user = await userRepository.findByEmailOrUsername(email, username);
+    if (!user) {
+        throw new ResourceNotFoundError('No such user exists');
+    }
+    const resetPasswordToken = jwt.generateAccessToken(newUser.email);
+    // send email for password reset
+    return res.send({ message: `Password Reset link sent to ${maskemail(newUser.email)}`});
+});
 wrapAsyncRouter(authRouter);
 
 export default authRouter;
