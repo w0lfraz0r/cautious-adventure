@@ -11,9 +11,7 @@ const verifyAccessToken = (req, res, next) => {
         throw new UnauthorizedError('Unauthorized User');
     }
 
-    const token = authHeader.split(' ')[1];
-
-    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+    jwt.verify(authHeader, process.env.JWT_SECRET, (err, decoded) => {
         if (err) {
             throw new UnauthorizedError('Invalid or expired token');
         }
