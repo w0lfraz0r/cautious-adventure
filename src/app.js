@@ -1,13 +1,15 @@
 import express from "express"
 import router from "./routers/index.js"
 import cors from "cors";
+import bodyParser from "body-parser";
 import errorHandler from './middlewares/errorHandler.js';
 import requestLogger from "./middlewares/requestLogger.js";
 import connectDB from "./db/connectDB.js";
 
 await connectDB();
 
-const app = express()
+const app = express();
+app.use(bodyParser.json());
 app.use(cors());
 
 app.use(function (req, res, next) {

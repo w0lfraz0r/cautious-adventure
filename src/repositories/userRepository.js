@@ -6,6 +6,12 @@ class UserRepository extends BaseRepository {
     super(User);
   }
 
+  async findByEmailOrUsername(email, username) {
+    const user = await this.model.findOne({ $or: [{ email }, { username }] })
+      .select({ email: 1, username: 1, password: 1 });
+    return user;
+  }
+
   // Add any user-specific data access methods here
 }
 
