@@ -11,15 +11,15 @@
             "watch_options": {
                 "followSymlinks": false
             },
-            "env": {
+            "env_development": {
                 "NODE_ENV": "development",
-                "instances": 1,
-                "exec_mode": "fork"
+                "INSTANCES": 1,
+                "EXEC_MODE": "fork"
             },
             "env_production": {
                 "NODE_ENV": "production",
-                "instances": "max",
-                "exec_mode": "cluster"
+                "INSTANCES": "max",
+                "EXEC_MODE": "cluster"
             }
         }
     ]
